@@ -16,9 +16,7 @@ MovieCandidates = {}
 MovieOfTheWeek = {}
 numbers = ['1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟']
 
-#Creating Discord Events
-#intents = discord.Intents.default()
-#intents.members = True
+#Setting Class to bot
 bot = discord.Bot()
 
 
@@ -36,6 +34,14 @@ guild_id = int(os.getenv('GUILD_ID'))
 tmdb_api = os.getenv('TMDB_API')
 versionnum = '1.1.1'
 changes = 'Added limit to 1 reaction per poll \n Added /recommend for movie list sent to DMs \n Added descriptions to commands '
+
+#Getting Reaction Ban list
+banlist = []
+banfile = open('banlist.txt')
+for x in banfile:
+    x = x.rstrip('\n')
+    x = int(x)
+    banlist.append(x)
 
 #Creating Movie Class
 class Movie:
@@ -198,20 +204,19 @@ async def discuss():
     await discussionpost.create_thread(name=MovieOfTheWeek['title'] + ' Discussion', auto_archive_duration=10080)
     print('Discussion post created')
 
-#Check for Duplicate Reaction
+
+#Check for Banned reactors
 @bot.event
-async def on_raw_reaction_add(payload): # checks whenever a reaction is added to a message
-     # Check if the reaction was made by the bot, and if the reaction was done in the voting channel.
-    if (payload.user_id != bot.user.id and payload.channel_id == vChannel):
-        
-        #Set channel and message
-        channel = await bot.fetch_channel(payload.channel_id)
-        message = await channel.fetch_message(payload.message_id)
-
-        # iterating through each reaction in the message
+async def on_raw_reaction_add(payload):
+    channel = await bot.fetch_channel(payload.channel_id)
+    message = await channel.fetch_message(payload.message_id)
+    #Check if user is in banlist
+    if (payload.user_id in banlist and payload.channel_id == vChannel):
+        await message.remove_reaction(payload.emoji, payload.member)
+        print('User that reacted is banned from reacting')
+    else:
         for r in message.reactions:
-
-            # checks the reactant isn't a bot and the emoji isn't the one they just reacted with
+    # checks the reactant isn't a bot and the emoji isn't the one they just reacted with
             if (payload.member in await r.users().flatten() and not payload.member.bot): 
                 if (str(r) != str(payload.emoji)):
                     print('Removing the reaction' + r.emoji)
