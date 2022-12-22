@@ -13,6 +13,10 @@ import asyncio
 
 load_dotenv()
 
+#CWD
+dir_path = os.path.dirname(os.path.realpath(__file__))
+
+
 
 
 #Dictionaries
@@ -41,7 +45,7 @@ changes = 'Added banlist \n Added auto discuss of /force creeate'
 
 #Getting Reaction Ban list
 banlist = []
-banfile = open('banlist.txt')
+banfile = open(os.path.join(dir_path, 'banlist.txt'))
 for x in banfile:
     x = x.rstrip('\n')
     x = int(x)
@@ -171,8 +175,9 @@ async def discuss():
     #create empty list for winners
     winners = []
     #write movie candidates to file
-    file1 = open('mc.txt', 'a')
-    file1.write(str(datetime.datetime.today()) + '\n')
+    mcfile = open(os.path.join(dir_path, 'mc.txt'),'a')
+    mcfile.write(str(datetime.datetime.today()) + '\n')
+    mcfile.close
     #Count Vote
     pollmessage = await vchannel.fetch_message(pollid)
     i = 0
@@ -180,10 +185,9 @@ async def discuss():
         rcount  = r.count
         winners.append(rcount)
         MovieCandidates[i]['votes'] = rcount
-        file1 = open('mc.txt', 'a')
-        file1.write('  ' + MovieCandidates[i]['title'] + ' ')
-        file1.write(str(rcount) + '\n')
-        file1.close
+        mcfile.write('  ' + MovieCandidates[i]['title'] + ' ')
+        mcfile.write(str(rcount) + '\n')
+        mcfile.close
         i = i+1
     #Find Max, and randomize if tie
     max_ = max(winners)
@@ -192,9 +196,9 @@ async def discuss():
     global MovieOfTheWeek
     MovieOfTheWeek = MovieCandidates[index]
     #write winning movie to file
-    file = open('motw.txt', 'a')
-    file.write(str(datetime.datetime.today()) + ' ' + MovieOfTheWeek['title'] + '\n')
-    file.close
+    motwfile = open(os.path.join(dir_path, 'motw.txt'),'a')
+    motwfile.write(str(datetime.datetime.today()) + ' ' + MovieOfTheWeek['title'] + '\n')
+    motwfile.close
     #Post winner to console
     print('And the winner is: ' + MovieOfTheWeek['title'] + ' (' + str(MovieOfTheWeek['release_date'][0:4]) + ')')
     #send notification to discussion channel
