@@ -40,9 +40,19 @@ MovieRole = int(os.getenv('MOVIE_ROLE'))
 admin_id = int(os.getenv('ADMIN_ID'))
 guild_id = int(os.getenv('GUILD_ID'))
 tmdb_api = os.getenv('TMDB_API')
+num_of_movies = int(os.getenv('NUM_OF_MOVIES'))
+poll_day = int(os.getenv('POLL_DAY'))
+poll_hour = int(os.getenv('POLL_HOUR'))
+discuss_day = int(os.getenv('DISCUSS_DAY'))
+discuss_hour = int(os.getenv('DISCUSS_HOUR'))
 versionnum = '1.2.0'
 changes = 'Changed file pathing to use directory where script is ran'
 
+print(num_of_movies)
+print(poll_day)
+print(poll_hour)
+print(discuss_day)
+print(discuss_hour)
 #Getting Reaction Ban list
 banlist = []
 banfile = open(os.path.join(dir_path, 'banlist.txt'))
@@ -101,7 +111,7 @@ async def create():
     r = requests.get('https://api.themoviedb.org/3/discover/movie?api_key=' + tmdb_api + '&include_adult=false&vote_count.gte=100&vote_average.gte=7.0&without_genres=35%2C99%2C10751%2C10402%2C10749%2C10770').json()
     total_pages = r['total_pages']
     useable_pages = total_pages - 1
-    for x in range(10):
+    for x in range(num_of_movies):
         #generate random page number
         pagenum = random.randint(1,useable_pages)
         #generate random result number
@@ -137,22 +147,14 @@ async def create():
     poll = discord.Embed(title='Poll for week of ' + formatted_date,
                         description='Vote for a movie in the thread below.', 
                         color=discord.Color.gold())
-    poll.add_field(name='Options', value = numbers[0] + '  ' + MovieCandidates[0]['title'] + ' (' + MovieCandidates[0]['release_date'][0:4] + ')' + '\n\n' 
-                                        + numbers[1] + '  ' + MovieCandidates[1]['title'] + ' (' + MovieCandidates[1]['release_date'][0:4] + ')' + '\n\n'
-                                        + numbers[2] + '  ' + MovieCandidates[2]['title'] + ' (' + MovieCandidates[2]['release_date'][0:4] + ')' + '\n\n' 
-                                        + numbers[3] + '  ' + MovieCandidates[3]['title'] + ' (' + MovieCandidates[3]['release_date'][0:4] + ')' + '\n\n'
-                                        + numbers[4] + '  ' + MovieCandidates[4]['title'] + ' (' + MovieCandidates[4]['release_date'][0:4] + ')' + '\n\n'
-                                        + numbers[5] + '  ' + MovieCandidates[5]['title'] + ' (' + MovieCandidates[5]['release_date'][0:4] + ')' + '\n\n'
-                                        + numbers[6] + '  ' + MovieCandidates[6]['title'] + ' (' + MovieCandidates[6]['release_date'][0:4] + ')' + '\n\n'
-                                        + numbers[7] + '  ' + MovieCandidates[7]['title'] + ' (' + MovieCandidates[7]['release_date'][0:4] + ')' + '\n\n'
-                                        + numbers[8] + '  ' + MovieCandidates[8]['title'] + ' (' + MovieCandidates[8]['release_date'][0:4] + ')' + '\n\n'
-                                        + numbers[9] + '  ' + MovieCandidates[9]['title'] + ' (' + MovieCandidates[9]['release_date'][0:4] + ')' + '\n\n')
+    for x in range(num_of_movies):
+         poll.add_field(name='Option ' + str(x+1) + ':', value = numbers[x] + '   ' + MovieCandidates[x]['title'] + ' (' + MovieCandidates[x]['release_date'][0:4] + ')' + '\n\n\n', inline=False)
     pollpost = await channel.send(embed=poll)
     pollthread = await pollpost.create_thread(name='Poll of the week', auto_archive_duration=1440)
     global pollid
     pollid = pollpost.id
-    for x in numbers:
-        await pollpost.add_reaction(x)
+    for x in range(num_of_movies):
+        await pollpost.add_reaction(numbers[x])
     i = 1
     for x in MovieCandidates:
         embed = MovieCandidates[x]['msg']
@@ -247,7 +249,7 @@ async def on_raw_reaction_add(payload):
 @tasks.loop(minutes=60)
 async def schedulecreate():
     current_time = datetime.datetime.now()
-    if(datetime.datetime.today().weekday() == 6 and current_time.hour == 15):
+    if(datetime.datetime.today().weekday() == poll_day and current_time.hour == poll_hour):
         print('Create starting at: ' + str(datetime.datetime.now()))
         await create()
 
@@ -255,7 +257,7 @@ async def schedulecreate():
 @tasks.loop(minutes=60)
 async def schedulediscuss():
     current_time = datetime.datetime.now()
-    if(datetime.datetime.today().weekday() == 0 and current_time.hour == 3):
+    if(datetime.datetime.today().weekday() == discuss_day and current_time.hour == discuss_hour):
         print('Discuss starting at: ' + str(datetime.datetime.now()))
         await discuss()
 
@@ -283,7 +285,7 @@ async def recommend(ctx):
     r = requests.get('https://api.themoviedb.org/3/discover/movie?api_key=' + tmdb_api + '&include_adult=false&vote_count.gte=100&vote_average.gte=7.0&without_genres=35%2C99%2C10751%2C10402%2C10749%2C10770').json()
     total_pages = r['total_pages']
     useable_pages = total_pages - 1
-    for x in range(10):
+    for x in range(num_of_movies):
         #generate random page number
         pagenum = random.randint(1,useable_pages)
         #generate random result number
