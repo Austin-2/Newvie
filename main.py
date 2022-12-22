@@ -8,8 +8,15 @@ from datetime import timedelta
 from discord.utils import get
 import random
 from dotenv import load_dotenv
+import asyncio
+import logging
 
 load_dotenv()
+
+
+#Setup logging
+logging.basicConfig(filename='newvie.log', encoding='utf-8', level=logging.DEBUG)
+
 
 #Dictionaries
 MovieCandidates = {}
@@ -32,8 +39,8 @@ MovieRole = int(os.getenv('MOVIE_ROLE'))
 admin_id = int(os.getenv('ADMIN_ID'))
 guild_id = int(os.getenv('GUILD_ID'))
 tmdb_api = os.getenv('TMDB_API')
-versionnum = '1.1.1'
-changes = 'Added limit to 1 reaction per poll \n Added /recommend for movie list sent to DMs \n Added descriptions to commands '
+versionnum = '1.1.3'
+changes = 'Added banlist \n added auto discuss of /force creeate'
 
 #Getting Reaction Ban list
 banlist = []
@@ -159,8 +166,6 @@ async def create():
         i = i + 1
     print('Movies Displayed')
 
-
-    
 #function to close poll and create discussion thread
 async def discuss():
     #set voice and discussion channel
@@ -204,19 +209,29 @@ async def discuss():
     await discussionpost.create_thread(name=MovieOfTheWeek['title'] + ' Discussion', auto_archive_duration=10080)
     print('Discussion post created')
 
+#Remove reactions
+@tasks.loop(minutes=1)
+async def remove_reacts():
+    print(str(datetime.datetime.now()) + ': Checking for banned users reacting.')
+    if len(MovieCandidates) > 0:
+        channel = bot.get_channel(vChannel)
+        message = await channel.fetch_message(pollid)
+        for reaction in message.reactions:
+            async for user in reaction.users():
+                if user.id in banlist:
+                    await message.remove_reaction(reaction.emoji,user)
+                    print('Removed '+ reaction.emoji + '  from ' + str(user))
+    else:
+        print('List is not created yet')
 
-#Check for Banned reactors
 @bot.event
 async def on_raw_reaction_add(payload):
+    user = await bot.fetch_user(payload.user_id)
     channel = await bot.fetch_channel(payload.channel_id)
     message = await channel.fetch_message(payload.message_id)
-    #Check if user is in banlist
-    if (payload.user_id in banlist and payload.channel_id == vChannel):
-        await message.remove_reaction(payload.emoji, payload.member)
-        print('User that reacted is banned from reacting')
-    else:
+     #checks the reactant isn't a bot and the emoji isn't the one they just reacted with
+    if (user != bot.user and payload.channel_id == vChannel):        
         for r in message.reactions:
-    # checks the reactant isn't a bot and the emoji isn't the one they just reacted with
             if (payload.member in await r.users().flatten() and not payload.member.bot): 
                 if (str(r) != str(payload.emoji)):
                     print('Removing the reaction' + r.emoji)
@@ -251,6 +266,13 @@ async def ping(ctx):
         await ctx.channel.send('Newive Version: ' + str(versionnum) + '\n' + changes)
     else:
         print ('You can\'t do that')
+
+
+#admin commands to manually call stuff in case scheduling fails
+"""
+@movies.command(name='test',description='Admin only. Used to quickly test functionality.')
+async def test(ctx):
+"""
 
 
 @movies.command(name='recommend',description='Send a list of 10 movies to your DMs. Uses the criteria that the main recommendation list is using')
@@ -293,6 +315,8 @@ async def recommend(ctx):
 async def force_create(message):
     if message.author.id == admin_id:
         await create()
+        await asyncio.sleep(43200)
+        await discuss()
     else:
         print ('You can\'t do that')
 
@@ -311,9 +335,11 @@ async def on_ready():
     print(f'We have logged in as {bot.user}')
     print('Newive Version: ', versionnum)
     print('Current time: ', datetime.datetime.now())
-#Schedule commands that loop
+    #Schedule commands that loop
     schedulecreate.start()
     schedulediscuss.start()
+    remove_reacts.start()
+
 
 #Connect Bot
 bot.run(os.getenv('DISCORD_TOKEN'))
