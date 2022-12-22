@@ -9,13 +9,10 @@ from discord.utils import get
 import random
 from dotenv import load_dotenv
 import asyncio
-import logging
+
 
 load_dotenv()
 
-
-#Setup logging
-logging.basicConfig(filename='newvie.log', encoding='utf-8', level=logging.DEBUG)
 
 
 #Dictionaries
