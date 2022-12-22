@@ -8,7 +8,7 @@ Newvie is a bot to help you and your friends on Discord create a movie club. New
 
 3. After a week of inactivity, the thread will close and the process begins again.
 
-# Details
+# Details 
 * Newvie retrieves 10 movies from TMDB with the following criteria:
   * Movie has over a 7.0 average rating.  
   * Movie has over 100 votes casted.
@@ -20,10 +20,12 @@ Newvie is a bot to help you and your friends on Discord create a movie club. New
     * Romance
     * TV Movie
 * Newvie creates a poll in the designated voting channel.This poll has reactions for each movie added.
+* 
 ![image](https://user-images.githubusercontent.com/65965601/208975830-5fdcf637-5be7-44b6-a5a8-8c294e57aaf5.png)
   * Users react to which movie they would like to watch. Users are limited to 1 vote per poll, the bot removes all but their latest reaction.
 
 * Newvie posts winning movie's embed message to the discussion channel, and creates a thread on that message.
+
 ![image](https://user-images.githubusercontent.com/65965601/208976145-76164712-e368-4b4f-af91-b385931e0742.png)
   * If there is a tie, Newvie will pick a random winner of movies with the most votes.
   * Users can type and discuss the movie in the thread.
@@ -76,6 +78,8 @@ To create the bot, you will need to configure a few variables in your .env file.
 * MOVIE_ROLE = <ID of the Movie Role. This will be mentioned in vote and discussion posts.\>
 * ADMIN_ID = <User ID of the designated admin. This is currently one user and will allow them access to certain commands.\>
 * GUILD_ID = <ID of the Discord server.\>
+
+* On start, newvie will get a list of user ids in `banlist.txt`. Put user ids of users you do not want to vote on each line in that file to have their reacts removed from the poll every minute. This had to be done like this as Discord cannot limit who reacts to a message if the reaction already exists.
 
 # Known Issues
 * If a user reacts fast to a poll, it can remove all their reactions on the poll. User must wait for the bot to check for all their reactions to be checked/removed before adding an extra reacton. To be safe, users should not vote more than once a minute.
