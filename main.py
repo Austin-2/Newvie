@@ -45,8 +45,8 @@ poll_day = int(os.getenv('POLL_DAY'))
 poll_hour = int(os.getenv('POLL_HOUR'))
 discuss_day = int(os.getenv('DISCUSS_DAY'))
 discuss_hour = int(os.getenv('DISCUSS_HOUR'))
-versionnum = '1.2.0'
-changes = 'Changed file pathing to use directory where script is ran'
+versionnum = '1.3.0'
+changes = 'Added configuration to .env for scheduling and number of movies.'
 
 print(num_of_movies)
 print(poll_day)
