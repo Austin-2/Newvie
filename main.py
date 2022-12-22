@@ -37,7 +37,7 @@ admin_id = int(os.getenv('ADMIN_ID'))
 guild_id = int(os.getenv('GUILD_ID'))
 tmdb_api = os.getenv('TMDB_API')
 versionnum = '1.1.3'
-changes = 'Added banlist \n added auto discuss of /force creeate'
+changes = 'Added banlist \n Added auto discuss of /force creeate'
 
 #Getting Reaction Ban list
 banlist = []
