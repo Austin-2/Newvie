@@ -40,8 +40,8 @@ MovieRole = int(os.getenv('MOVIE_ROLE'))
 admin_id = int(os.getenv('ADMIN_ID'))
 guild_id = int(os.getenv('GUILD_ID'))
 tmdb_api = os.getenv('TMDB_API')
-versionnum = '1.1.3'
-changes = 'Added banlist \n Added auto discuss of /force creeate'
+versionnum = '1.2.0'
+changes = 'Changed file pathing to use directory where script is ran'
 
 #Getting Reaction Ban list
 banlist = []
