@@ -94,11 +94,11 @@ Future changes I want to add, in no particular order.
   * Genres to exclude.
   * Average Score.
   * Number of Votes.
-* ~~ Add flexibility on the number of movies. Currently hardcoded to be 10. ~~
+* ~~Add flexibility on the number of movies. Currently hardcoded to be 10.~~
 * Add a list of services that the movie is available on streaming/rent.
 * Create new poll and discussion once certain number of users react that they have seen the movie.
 * Add parameters to /recommend to help change what movie results are returned.
-* ~~ Add configuration to the scheduled time. ~~
+* ~~Add configuration to the scheduled time.~~
 * Add support to use the users timezone.
 * Clean up errors and log more.
 * Clean up "Bot did not respond error" that appears in the Discord.
