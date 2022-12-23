@@ -19,6 +19,7 @@ Newvie is a bot to help you and your friends on Discord create a movie club. New
     * Music
     * Romance
     * TV Movie
+  * The movie is not an adult movie.
 * Newvie creates a poll in the designated voting channel.This poll has reactions for each movie added.
 * 
 ![image](https://user-images.githubusercontent.com/65965601/208975830-5fdcf637-5be7-44b6-a5a8-8c294e57aaf5.png)
