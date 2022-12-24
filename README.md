@@ -32,6 +32,32 @@ Newvie is a bot to help you and your friends on Discord create a movie club. New
   * List of all movie candidates and their votes are saved to `mc.txt`.
   * List of the time and winning movie is saved to `motw.txt`.
 
+# Enviornment Setup
+To use the bot, you will need to configure a few variables in `.env` and `config.ini`. All Discord related IDs can be retrieved by right clicking the object after enabling `Developer Mode` in Settings > Advanced.
+
+<ins>.env</ins>
+* DISCORD_TOKEN = <Your Bot's Discord Token\>
+* TMDB_API = <Your TMDB API Token\>
+
+<ins>config.ini</ins>
+
+Discord
+* Guild_ID = <id of server the bot will post in\>
+* Vote_Channel_ID = <id of channel vote threads will be posted in\>
+* Discussion_Channel_ID = <id of channel discussion threads will be posted in\>
+* Role_ID = <id of role to be pinged on vote and discussion posts\>
+* Admin_IDs = <list of ids of admins capable of using commands, comma separated, example: 118503143762128371,118503143762618331,11850314376261873\>
+* Banned_Voters = <list of ids of users whose votes you want removed from the poll, comma separated, example: 118503143762128371,118503143762618331,118503143762618736\>
+
+Newvie
+* Number_of_Movies = <Number of movies you want in each poll, max 10>
+* Poll_Day = <Day of the week for the poll posted, 0-6, 0 = Monday, 6 = Sunday, in systems time zone.>
+* Poll_Hour = <Hour that you want the poll posted, 24h format, in systems time zone.>
+* Vote_Time = <# of hours you want the poll open for before the discussion post is made.>
+  * Keep in mind, movie candidates are not saved through reboots, so the movie list would need to be created and posted before the device reboots.
+
+`sample.env` and `sample-config.ini` are provided in this repository. Take those two files and add your specific information to make the bot work properly. Rename them to `.env` and `config.ini` respectively. Values in either file do not need to be surrounded by quotes.
+
 
 # Commands
 All commands are part of the /newvie command group.
@@ -72,6 +98,7 @@ All commands are part of the /newvie command group.
  
  * **/newvie set_vote_timer** [hours]: Sets the number of hours the poll will be open for.
    * hours: A float. Will be converted to seconds for `asyncio.sleep`.
+   * Keep in mind, movie candidates are not saved through reboots, so the movie list would need to be created and posted before the device reboots.
 
 # Discord Setup
 While it is certainly not necessary, I recommend to have 4 text channels and one role for this to work and look nice:
@@ -93,23 +120,6 @@ While it is certainly not necessary, I recommend to have 4 text channels and one
   
  I recommend making these text channels private to those that have the role, so that they don't get spammed.
 
-# Enviornment Setup
-To use the bot, you will need to configure a few variables in `.env` and `config.ini`. All Discord related IDs can be retrieved by right clicking the object after enabling `Developer Mode` in Settings > Advanced.
-
-<ins>.env</ins>
-* DISCORD_TOKEN = <Your Bot's Discord Token\>
-* TMDB_API = <Your TMDB API Token\>
-
-<ins>config.ini</ins>
-* Guild_ID = <id of server the bot will post in\>
-* Vote_Channel_ID = <id of channel vote threads will be posted in\>
-* Discussion_Channel_ID = <id of channel discussion threads will be posted in\>
-* Role_ID = <id of role to be pinged on vote and discussion posts\>
-* Admin_IDs = <list of ids of admins capable of using commands, comma separated, example: 118503143762128371,118503143762618331,11850314376261873\>
-* Banned_Voters = <list of ids of users whose votes you want removed from the poll, comma separated, example: 118503143762128371,118503143762618331,118503143762618736\>
-
-`sample.env` and `sample-config.ini` are provided in this repository. Take those two files and add your specific information to make the bot work properly. Rename them to `.env` and `config.ini` respectively. Values in either file do not need to be surrounded by quotes.
-
 # Known Issues
 * If a user reacts fast to a poll, it can remove all their reactions on the poll. User must wait for the bot to check for all their reactions to be checked/removed before adding an extra reacton. To be safe, users should not vote more than once a minute.
 * Event scheduling is not accurate. Due to issues I had with `scheduler`, I did a workaround where the `tasks` module is running a command every hour, that command checks if the day and hour at that time is equal to when the user sets, and will run the process.
@@ -119,6 +129,7 @@ To use the bot, you will need to configure a few variables in `.env` and `config
 
 # To Do
 Future changes I want to add, in no particular order.
+* Allow movie candidates to be saved between reboots.
 * Add configurability to the TMDB search parameters.
   * Genres to include.
   * Genres to exclude.
