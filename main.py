@@ -287,23 +287,14 @@ async def schedulecreate():
         print('Create starting at: ' + str(datetime.datetime.now()))
         await create()
 
+"""
 #admin commands to manually call stuff in case scheduling fails
 @movies.command(name='test',description='Admin only. Used to quickly test functionality.')
 async def test(ctx):
     if ctx.author.id in admin_ids:
-        print('vote_channel_id: ',vote_channel_id, '\n')
-        print('discussion_channel_id: ', discussion_channel_id,'\n')
-        print('role id: ', role_id, '\n')
-        print('admin_ids: ',admin_ids, '\n')
-        print('guild_id: ',guild_id, '\n')
-        print('ban_list: ',ban_list, '\n')
-        print('num_of_movies: ',num_of_movies, '\n')
-        print('poll_day: ',poll_day, '\n')
-        print('poll_hour: ',poll_hour, '\n')
-        print('vote_time: ',vote_time, '\n')
     else:
         print ('You can\'t do that')
-
+"""
 
 @movies.command(name='recommend', description='Send a list of movies to your DMs. Uses the criteria that the main recommendation list is using')
 async def recommend(ctx, num: int):
@@ -363,7 +354,19 @@ async def force_discuss(message):
 @movies.command(name='ping',description='Admin only. Used as a health check to see if the bot is online and responding to commands.')
 async def ping(ctx):
     if ctx.author.id in admin_ids:
-        await ctx.channel.send('Newive Version: ' + str(versionnum) + '\n' + changes)
+        await ctx.respond('Newive Version: ' + str(versionnum) + '\n'+
+                            changes + '\n'+
+                            '==================Config==================\n'
+                            'vote_channel_id: ' + str(vote_channel_id) + '\n'+
+                            'discussion_channel_id: ' + str(discussion_channel_id) + '\n'+
+                            'role id: ' + str(role_id) + '\n'+ 
+                            'admin_ids: ' + str(admin_ids) + '\n'+ 
+                            'guild_id: ' + str(guild_id) + '\n'+ 
+                            'ban_list: ' + str(ban_list) + '\n'+ 
+                            'num_of_movies: ' + str(num_of_movies) + '\n' +
+                            'poll_day: ' + str(poll_day) + '\n'+
+                            'poll_hour: ' + str(poll_hour) + '\n'+
+                            'vote_time: '+ str(vote_time) + '\n')
     else:
         print ('You can\'t do that')
 
