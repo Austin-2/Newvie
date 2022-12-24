@@ -61,7 +61,7 @@ All commands are part of the /newvie command group.
 
 * **/newvie ban_voter** [member]: Bans the member from reacting to movie polls.
 
-* **/newvie unban_admin** [member]: Unbans the member form reacting to movie polls.
+* **/newvie unban_voter** [member]: Unbans the member form reacting to movie polls.
 
 * **/newvie set_number_of_movies** [number]: Changes the number of movies to added to the weekly poll.
   * number: Number of movies to recommend. Must be between 1-10.
