@@ -297,14 +297,14 @@ async def test(ctx):
 """
 
 @movies.command(name='recommend', description='Send a list of movies to your DMs. Uses the criteria that the main recommendation list is using')
-async def recommend(ctx, num: int):
-    if 0 < num <= 10:
+async def recommend(ctx, number: int):
+    if 0 < number <= 10:
         #find_movies()
         embedrecs = []
         r = requests.get('https://api.themoviedb.org/3/discover/movie?api_key=' + tmdb_api + '&include_adult=false&vote_count.gte=100&vote_average.gte=7.0&without_genres=35%2C99%2C10751%2C10402%2C10749%2C10770').json()
         total_pages = r['total_pages']
         useable_pages = total_pages - 1
-        for x in range(num):
+        for x in range(number):
             #generate random page number
             pagenum = random.randint(1,useable_pages)
             #generate random result number
@@ -332,9 +332,9 @@ async def recommend(ctx, num: int):
         print('Movies Created')
         channel = await ctx.author.create_dm()
         await channel.send(embeds=embedrecs)
-        await ctx.respond('Check your DMs for ' + str(num) + ' movie recommendations!')
+        await ctx.respond('Check your DMs for ' + str(number) + ' movie recommendations!')
     else:
-        await ctx.respond('Please enter a number between 0 and 10.')
+        await ctx.respond('Please enter a number between 1 and 10.')
     
 @movies.command(name='create', description='Admin only. Used as a backup if server wide recommendation and poll scheduling fails.')
 async def force_create(message):
@@ -427,7 +427,7 @@ async def set_discussion_channel(ctx, number: int):
             await LoadConfig()
             await ctx.respond('Number of movies changed to ' + num + '.')
         else:
-            await ctx.respond('Please enter a value between 0 and 10.')
+            await ctx.respond('Please enter a value between 1 and 10.')
     else:
         print ('You can\'t do that')
 
