@@ -493,19 +493,21 @@ async def add_admin(ctx, member: discord.Member):
 @movies.command(name='remove_admin', description='Admin only. Used to remove an admin from newvie.')
 async def remove_admin(ctx, member: discord.Member):
     if ctx.author.id in admin_ids:
-        cfg.read((os.path.join(dir_path, 'config.ini')))
-        admin_id_list = cfg['DISCORD']['admin_ids'].split(',')
-        if str(member.id) in admin_id_list:    
-            user_id = str(member.id)
-            admin_id_list.remove(user_id)
-            admin_id_list_string = ','.join(admin_id_list)
-            cfg.set('DISCORD','admin_ids', admin_id_list_string)
-            with open((os.path.join(dir_path, 'config.ini')), 'w') as cfgfile:
-                cfg.write(cfgfile)
-            await LoadConfig()
-            await ctx.respond(member.name + ' is no longer a Newvie admin.')
-        else:
-            await ctx.respond(member.name + ' is not a Newvie admin.')
+        if ctx.author.id != member.id:
+            cfg.read((os.path.join(dir_path, 'config.ini')))
+            admin_id_list = cfg['DISCORD']['admin_ids'].split(',')
+            if str(member.id) in admin_id_list:    
+                user_id = str(member.id)
+                admin_id_list.remove(user_id)
+                admin_id_list_string = ','.join(admin_id_list)
+                cfg.set('DISCORD','admin_ids', admin_id_list_string)
+                with open((os.path.join(dir_path, 'config.ini')), 'w') as cfgfile:
+                    cfg.write(cfgfile)
+                await LoadConfig()
+                await ctx.respond(member.name + ' is no longer a Newvie admin.')
+            else:
+                await ctx.respond(member.name + ' is not a Newvie admin.')
+        else: await ctx.respond('You cannot remove yourself as a Newvie admin')
     else:
         print ('You can\'t do that')
 
