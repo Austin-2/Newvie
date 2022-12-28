@@ -27,7 +27,7 @@ Newvie is a bot to help you and your friends on Discord create a movie club. New
   * Users react to which movie they would like to watch. Users are limited to 1 vote per poll, the bot removes all but their latest reaction.
 * Newvie posts winning movie's embed message to the discussion channel, and creates a thread on that message.
 
-![image](https://user-images.githubusercontent.com/65965601/209847194-0f7bdb12-b28d-4f2d-be97-c03f20add708.png)
+![image](https://user-images.githubusercontent.com/65965601/209847298-5cd6203d-406e-492f-a84c-5e438ca55efb.png)
   * If there is a tie, Newvie will pick a random winner of movies with the most votes.
   * Users can type and discuss the movie in the thread.
   * List of all movie candidates and their votes are saved to `mc.txt`.
