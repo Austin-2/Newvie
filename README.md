@@ -147,4 +147,4 @@ Future changes I want to add, in no particular order.
 * Add support to use the users timezone.
 * Clean up errors and log more.
 * Clean up "Bot did not respond error" that appears in the Discord.
-* Add pictures of real bot in Readme.
+* ~~Add pictures of real bot in Readme.~~
